@@ -32,3 +32,23 @@ fi
 
 echo "Start Docker Compose ..."
 docker-compose up -d
+
+Container="web-app api postgres webserver"
+for container_name in $Container; do
+    if [ "$(docker ps -q -f name=$container_name)" ]; then
+        if [ ! $(docker inspect -f '{{.State.Running}}' $container_name) = "true" ]; then
+            echo "Container not running: "$container_name
+            docker ps -a
+            exit
+        fi
+    fi
+done
+
+set -e
+docker exec -it api yarn db:create
+docker exec -it api yarn db:migrate
+
+docker ps -a
+
+echo
+echo "** Deployment successful **"
