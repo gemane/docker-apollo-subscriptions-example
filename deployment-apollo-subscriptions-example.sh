@@ -27,11 +27,18 @@ if [[ $(docker volume ls -f dangling=true | grep local) ]]; then
 fi
 if [[ $(docker network ls| grep local) ]]; then
     echo "Clean up orphaned networks";
-    docker network rm $(docker network ls -q);
+    docker network prune $(docker network ls -q);
 fi
 
 echo "Start Docker Compose ..."
 docker-compose up -d
+
+# The database is not ready when the api container starts so the api container has to restart again.
+sleep 10;
+
+set -e
+docker exec -it api yarn db:create
+docker exec -it api yarn db:migrate
 
 Container="web-app api postgres webserver"
 for container_name in $Container; do
@@ -43,10 +50,6 @@ for container_name in $Container; do
         fi
     fi
 done
-
-set -e
-docker exec -it api yarn db:create
-docker exec -it api yarn db:migrate
 
 docker ps -a
 
