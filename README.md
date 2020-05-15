@@ -39,8 +39,8 @@ docker exec -it api yarn db:migrate
 * Web App with React at 
   + http://localhost:3000/
 
- * API as NodeJS project with GraphQL at 
-   + https://localhost/graphiql
+* API as NodeJS project with GraphQL at 
+  + https://localhost/graphiql
 
 * Websocket at
   + wss://localhost:443/subscriptions
