@@ -45,7 +45,16 @@ docker exec -it api yarn db:migrate
 * Websocket at
   + wss://localhost:443/subscriptions
 
-  
- 
+## Deployment
 
- 
+Included is a deployment script `deployment-apollo-subscriptions-example.sh` so that the application can be started easily. 
+
+Be careful as this script 
+
+* stops all relevant container
+* deletes all exited container
+* deletes unused images
+* deletes orphaned volumes
+* and deletes orphaned network nodes.
+
+Finally it builds and starts up all docker images.
